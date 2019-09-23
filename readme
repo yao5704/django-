@@ -33,7 +33,7 @@ urlpatterns = [
 在第一个url设置中当页面加载 127.0.0.1:8000/css/ 中的文件时，会到项目目录下 templates/css/ 进行查找
     此时index.html能正确加载css文件
 同理，当right.html加载 127.0.0.1:8000/example/right/css/ 中的文件时，会到项目目录下 templates/css/ 进行查找
-    此时error.html也能正确加载css文件
+    此时right.html也能正确加载css文件
 
 
 
