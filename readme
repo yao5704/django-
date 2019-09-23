@@ -1,0 +1,39 @@
+0921
+每次前后端分离时，css、js的路径加载都出现问题。
+看别人的博客老是有歧义，做个例子让自己记一下：
+目录结构：
+项目----
+        |
+      templates----
+                   |
+                index.html
+                right.html
+                errot.html
+                   css----
+                          |
+                        test.css
+路由：
+    127.0.0.1:8000 渲染 index.html
+    127.0.0.1:8000/example/right/ 渲染 right.html
+    127.0.0.1:8000/example/error/ 渲染 error.html
+三个html中css的链接都为 <link rel="stylesheet" href="css/test.css"  >
+由于是相对路径，所以index.html寻找会指向127.0.0.1:8000/css/test.css
+同理                                    127.0.0.1:8000/example/right/css/test.css
+                                        127.0.0.1:8000/example/error/css/test.css
+    此时三个页面都无法正确加载css文件
+
+操作：
+urls.py
+urlpatterns = [
+    #第一个url设置
+    url(r'^css/(?P<path>.*)$', serve, {'document_root': 'templates/css/'}),
+    #第二个url设置
+    url(r'^example/right/css/(?P<path>.*)$', serve, {'document_root': 'templates/css/'}),
+]
+在第一个url设置中当页面加载 127.0.0.1:8000/css/ 中的文件时，会到项目目录下 templates/css/ 进行查找
+    此时index.html能正确加载css文件
+同理，当right.html加载 127.0.0.1:8000/example/right/css/ 中的文件时，会到项目目录下 templates/css/ 进行查找
+    此时error.html也能正确加载css文件
+
+
+
